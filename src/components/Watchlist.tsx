@@ -5,7 +5,7 @@ interface WatchlistInterface {
 }
 
 export function Watchlist({items}: WatchlistInterface) {
-    return items.length ? 
+    return items && items.length ? 
             <>
                 {items.map((item: Stock) => {
                     return <div key={item.symbol}>{item.symbol}</div>;

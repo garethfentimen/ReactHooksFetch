@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AddToWatchlist, { Stock } from './components/AddToWatchlist';
@@ -6,18 +6,16 @@ import { Watchlist } from './components/Watchlist';
 import useFetch from './hooks/useFetch';
 
 function App() {
-  const [watchlist, setWatchlist] = useState<{items: Stock[]}>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [watchlistData, watchlistLoading, watchlistError] = useFetch("https://demomocktradingserver.azurewebsites.net/userdata/watchlist", "gareth.fentimen");
+  const [watchlistData, watchlistLoading, watchlistError, setWatchlistData] = useFetch<Stock[]>("https://demomocktradingserver.azurewebsites.net/userdata/watchlist", "gareth.fentimen");
 
   const handleRemove = (newItem: Stock) => {
-      const newitems = watchlist && watchlist.items.filter(s => s.symbol !== newItem.symbol);
-      newitems && setWatchlist({ items: newitems });
+      const newitems = watchlistData && watchlistData.filter(s => s.symbol !== newItem.symbol);
+      newitems && setWatchlistData(newitems);
   }
 
-  const handleAdd = (newItem: Stock) => { 
-    watchlist && watchlist.items.push(newItem);
-    watchlist && setWatchlist({items: watchlist.items});
+  const handleAdd = (newItem: Stock) => {
+    watchlistData && setWatchlistData([...watchlistData, ...[newItem]]);
   }
 
   return (
