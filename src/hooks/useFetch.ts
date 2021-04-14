@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
  
-function useFetch(url: string, userId: string) {
+function useFetch<T>(url: string, userId: string): [T | undefined, boolean, string, Function] {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<T>();
   const [error, setError] = useState("");
  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetch(url, { 
+        const response = await fetch(url, { 
           headers: {
             userId
           }
         });
-        const json = await data.json();
+        const json = await response.json();
  
         if (json) {
           setLoading(false);
@@ -30,7 +30,7 @@ function useFetch(url: string, userId: string) {
     fetchData();
   }, [url, userId]);
  
-  return [ data, loading, error ];
+  return [ data, loading, error, setData ];
 }
  
 export default useFetch;
