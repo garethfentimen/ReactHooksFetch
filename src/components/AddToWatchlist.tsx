@@ -4,20 +4,7 @@ export interface Stock {
     symbol: string
 }
 
-export interface OnAddFunction {
-    (stockAdded: Stock) : void
-}
-
-export interface OnRemoveFunction {
-    (stockAdded: Stock) : void
-}
-
-export interface AddToWatchlistProps {
-    onAdd: OnAddFunction,
-    onRemove: OnRemoveFunction
-}
-
-function AddToWatchlist({ onAdd, onRemove } : AddToWatchlistProps) {
+function AddToWatchlist({ onAdd, onRemove } : AddToWatchlist) {
     const [stock, setStock] = React.useState<string>("");
     const addToWatchlist = async () => {
         const response = await fetch("https://demomocktradingserver.azurewebsites.net/userdata/watchlist",
@@ -75,3 +62,16 @@ function AddToWatchlist({ onAdd, onRemove } : AddToWatchlistProps) {
 };
 
 export default AddToWatchlist;
+
+export interface OnAddFunction {
+    (stockAdded: Stock) : void
+}
+
+export interface OnRemoveFunction {
+    (stockAdded: Stock) : void
+}
+
+export interface AddToWatchlist {
+    onAdd: OnAddFunction,
+    onRemove: OnRemoveFunction
+}

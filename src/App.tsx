@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AddToWatchlist, { Stock } from './components/AddToWatchlist';
+import { Watchlist } from './components/Watchlist';
 
 function App() {
   const [watchlist, setWatchlist] = useState<{items: Stock[]}>();
 
   useEffect(() => {
     (async () => {
+      
       const response = await fetch("https://demomocktradingserver.azurewebsites.net/userdata/watchlist",
         {
           headers: { 
@@ -18,6 +20,7 @@ function App() {
 
       const jsonData = await response.json();
       setWatchlist({ items: jsonData });
+
     })();
   }, []);
 
@@ -40,11 +43,8 @@ function App() {
       
       <main role="main">
         {!watchlist ? <div>loading...</div> : 
-          watchlist.items.length ? 
-            watchlist.items.map((item: Stock) => {
-              return <div key={item.symbol}>{item.symbol}</div>;
-            })
-          : <div>watchlist is empty</div>}
+          <Watchlist items={watchlist.items} />
+        }
         <AddToWatchlist onRemove={handleRemove} onAdd={handleAdd} />
       </main>
     </div>
