@@ -3,26 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 import AddToWatchlist, { Stock } from './components/AddToWatchlist';
 import { Watchlist } from './components/Watchlist';
+import useFetch from './hooks/useFetch';
 
 function App() {
   const [watchlist, setWatchlist] = useState<{items: Stock[]}>();
-
-  useEffect(() => {
-    (async () => {
-      
-      const response = await fetch("https://demomocktradingserver.azurewebsites.net/userdata/watchlist",
-        {
-          headers: { 
-            userid: "gareth.fentimen" 
-          } 
-        }
-      );
-
-      const jsonData = await response.json();
-      setWatchlist({ items: jsonData });
-
-    })();
-  }, []);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [watchlistData, watchlistLoading, watchlistError] = useFetch("https://demomocktradingserver.azurewebsites.net/userdata/watchlist", "gareth.fentimen");
 
   const handleRemove = (newItem: Stock) => {
       const newitems = watchlist && watchlist.items.filter(s => s.symbol !== newItem.symbol);
@@ -42,8 +28,8 @@ function App() {
       </header>
       
       <main role="main">
-        {!watchlist ? <div>loading...</div> : 
-          <Watchlist items={watchlist.items} />
+        {watchlistLoading ? <div>loading...</div> : 
+          <Watchlist items={watchlistData as Stock[]} />
         }
         <AddToWatchlist onRemove={handleRemove} onAdd={handleAdd} />
       </main>
